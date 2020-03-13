@@ -14,10 +14,10 @@
     $res = mysqli_query($koneksi, $sql);
 
     if ($res) {
-        header('location: latihan04.php');
+        header('location: template.php?content=display_dan_viewdetail.php');
         exit();
     } else {
-        header('location: forminput.html');
+        header('location: template.php?content=forminput.html');
         exit();
     }
     

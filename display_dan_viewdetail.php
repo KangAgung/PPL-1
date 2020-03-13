@@ -19,7 +19,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Latihan 04</title>
     <style>
-        table {
+        #t1 {
             width: 50%;
             margin-top: 30px;
         }
@@ -35,10 +35,6 @@
 
         td, th {
             padding: 10px;
-        }
-
-        td {
-            text-align: center;
         }
 
         #t1 tr:nth-child(even) {
@@ -67,7 +63,7 @@
             <td><?php echo($data['nama']); ?></td>
             <td><?php echo($data['umur']); ?></td>
             <td>
-                <a href="viewdetail.php?nim=<?php echo($data['nim']) ?>">View Detail</a>
+                <a href="template.php?content=viewdetail.php&nim=<?php echo($data['nim']); ?>&nama=<?php echo($data['nama']); ?>&umur=<?php echo($data['umur']); ?>">Detail</a>
             </td>
             <td>
                 <a href="delete.php?nim=<?php echo($data['nim']) ?>">Delete</a>

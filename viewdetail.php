@@ -1,5 +1,7 @@
 <?php
     $nim = $_GET['nim'];
+    $nama = $_GET['nama'];
+    $umur = $_GET['umur'];
 ?>
 
 <!DOCTYPE html>
@@ -9,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Latihan 04</title>
     <style>
-        table {
+        #t1 {
             width: 50%;
             margin-top: 30px;
         }
@@ -21,14 +23,11 @@
         th {
             background-color: black;
             color: whitesmoke;
+            width: 30%
         }
 
         td, th {
             padding: 10px;
-        }
-
-        td {
-            text-align: center;
         }
 
         #t1 tr:nth-child(even) {
@@ -44,6 +43,14 @@
         <tr>
             <th>NIM</th>
             <td><?php echo $nim; ?></td>
+        </tr>
+        <tr>
+            <th>Nama</th>
+            <td><?php echo $nama; ?></td>
+        </tr>
+        <tr>
+            <th>Umur</th>
+            <td><?php echo $umur; ?></td>
         </tr>
 </table>
 
