@@ -1,23 +1,9 @@
-<?php
-    $host = "localhost";
-    $database = "dbakademis";
-    $user = "root";
-    $password = "";
-    $koneksi=mysqli_connect($host,$user,$password,$database);
-    if(!$koneksi) {
-        die("Error : ".mysql_error());
-    }
-
-    $sql = "SELECT * FROM mahasiswa";
-    $res = mysqli_query($koneksi, $sql);
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Latihan 04</title>
+    <title>Latihan tabel</title>
     <style>
         table {
             width: 50%;
@@ -56,26 +42,22 @@
             <th>NIM</th>
             <th>Nama</th>
             <th>Umur</th>
-            <th>Detail</th>
-            <th>Delete</th>
         </tr>
-    <?php
-        while ($data = mysqli_fetch_array($res)) {
-    ?>        
         <tr>
-            <td><?php echo($data['nim']); ?></td>
-            <td><?php echo($data['nama']); ?></td>
-            <td><?php echo($data['umur']); ?></td>
-            <td>
-                <a href="viewdetail.php?nim=<?php echo($data['nim']) ?>">View Detail</a>
-            </td>
-            <td>
-                <a href="delete.php?nim=<?php echo($data['nim']) ?>">Delete</a>
-            </td>
+            <td>181511036</td>
+            <td>Agung</td>
+            <td>19</td>
         </tr>
-    <?php
-        }
-    ?>
+        <tr>
+            <td>181511037</td>
+            <td>Isal</td>
+            <td>19</td>
+        </tr>
+        <tr>
+            <td>181511038</td>
+            <td>Alya</td>
+            <td>19</td>
+        </tr>
     </table>
 </body>
 </html>

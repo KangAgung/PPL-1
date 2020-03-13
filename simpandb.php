@@ -17,7 +17,7 @@
         header('location: latihan04.php');
         exit();
     } else {
-        header('location: form.html');
+        header('location: forminput.html');
         exit();
     }
     
