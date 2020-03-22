@@ -3,28 +3,32 @@
 <head>
 <title></title>
 <style>
-    table, th, td {
-            border: 1px solid black;
-            border-collapse: collapse;
-            width: 100%;
-        }
-    
-    #header {
-        height: 100px;
-        text-align:center;
+    table {
+        border: 1px solid black;
+        border-collapse: collapse;
+        width: 100%;
     }
-
-    #footer {
+    
+    #header, #footer {
+        border: 1px solid black;
+        border-collapse: collapse;
+        width: 100%;
         height: 100px;
         text-align:center;
     }
 
     #content {
+        border: 1px solid black;
+        border-collapse: collapse;
+        width: 100%;
         height: 200px;
         text-align:center;
     }
 
     #navbar {
+        border: 1px solid black;
+        border-collapse: collapse;
+        width: 100%;
         height: 50px;
         text-align: left;
     }
@@ -40,8 +44,8 @@
             <a href="template.php?content=<?php echo"home.php"; ?>">Home</a> | 
             <a href="template.php?content=<?php echo"berita.php"; ?>">Berita</a> |
             <a href="template.php?content=<?php echo"kontak.php"; ?>">Kontak</a> |
-            <a href="template.php?content=<?php echo"display_dan_viewdetail.php"; ?>">Display Data</a> |
-            <a href="template.php?content=<?php echo"forminput.html"; ?>">Tambah Data</a> |
+            <a href="template.php?content=<?php echo"cari.php"; ?>">Barang</a> |
+            <!-- <a href="template.php?content= echo"forminput.html"; ">Tambah Data</a> | -->
         </td>
         </tr>
         <tr id="content">
