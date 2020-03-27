@@ -1,3 +1,16 @@
+<?php
+    session_start();
+    if(!empty($_POST["username"] && !empty($_POST["password"]))) {
+        $_SESSION["username"] = $_POST["username"];
+        $_SESSION["password"] = $_POST["password"];
+    }
+
+    if(!isset($_SESSION["username"])){
+        session_destroy();
+        header("location: login_tanpa_database.php");
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -45,6 +58,7 @@
             <a href="template.php?content=<?php echo"berita.php"; ?>">Berita</a> |
             <a href="template.php?content=<?php echo"kontak.php"; ?>">Kontak</a> |
             <a href="template.php?content=<?php echo"cari.php"; ?>">Barang</a> |
+            <a href="logout.php">Logout</a>
             <!-- <a href="template.php?content= echo"forminput.html"; ">Tambah Data</a> | -->
         </td>
         </tr>
