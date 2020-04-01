@@ -1,13 +1,31 @@
 <?php
+    $host = "localhost";
+    $database = "dbakademis";
+    $user = "root";
+    $password = "";
+    $koneksi=mysqli_connect($host,$user,$password,$database);
+    if(!$koneksi) {
+        die("Error : ".mysql_error());
+    }
+
     session_start();
-    if(!empty($_POST["username"] && !empty($_POST["password"]))) {
-        $_SESSION["username"] = $_POST["username"];
-        $_SESSION["password"] = $_POST["password"];
+    if(!empty($_POST["username"]) && !empty($_POST["password"])) {
+        $username = $_POST["username"];
+        $password = $_POST["password"];
+        // $password = md5($_POST["password"]); // using md5 hash
+
+        $sql = "SELECT * FROM admin WHERE username LIKE'$username' AND password = '$password'";
+        $res = mysqli_query($koneksi, $sql);
+        if (mysqli_num_rows($res) == 0) {
+            header("Location: login.php");
+        }
+
+        $_SESSION["username"] = $username;
     }
 
     if(!isset($_SESSION["username"])){
         session_destroy();
-        header("location: login_tanpa_database.php");
+        header("location: login.php");
     }
 ?>
 

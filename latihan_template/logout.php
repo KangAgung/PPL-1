@@ -1,5 +1,5 @@
 <?php
     session_start();
     session_destroy();
-    header("location:login_tanpa_database.php");
+    header("location:login.php");
 ?>
