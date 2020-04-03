@@ -10,7 +10,10 @@
     $nim = $_POST['nim'];
     $nama = $_POST['nama'];
     $umur = $_POST['umur'];
-    $sql = "INSERT INTO mahasiswa VALUES ('$nim','$nama','$umur')";
+    $namafilefoto = $_FILES['namafilefoto']['name'];
+    $file_tmp = $_FILES['namafilefoto']['tmp_name'];
+    move_uploaded_file($file_tmp, '../assets/fotomahasiswa/'.$namafilefoto);
+    $sql = "INSERT INTO mahasiswa VALUES ('$nim','$nama','$umur','$namafilefoto')";
     $res = mysqli_query($koneksi, $sql);
 
     if ($res) {

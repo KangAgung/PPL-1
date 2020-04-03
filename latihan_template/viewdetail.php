@@ -2,6 +2,7 @@
     $nim = $_GET['nim'];
     $nama = $_GET['nama'];
     $umur = $_GET['umur'];
+    $namafilefoto = $_GET['namafilefoto']
 ?>
 
 <!DOCTYPE html>
@@ -37,6 +38,11 @@
         #t1 tr:nth-child(odd){
             background-color: #eee;
         }
+
+        .fotomhs {
+            width:200px;
+            height:200px;
+        }
     </style>
 </head>
 <table id="t1" align="center">
@@ -51,6 +57,10 @@
         <tr>
             <th>Umur</th>
             <td><?php echo $umur; ?></td>
+        </tr>
+        <tr>
+            <th>Foto</th>
+            <td><img class="fotomhs" src="../assets/fotomahasiswa/<?php echo $namafilefoto; ?>" alt="foto mahasiswa"></td>
         </tr>
 </table>
 

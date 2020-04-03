@@ -44,6 +44,11 @@
         #t1 tr:nth-child(odd){
             background-color: #eee;
         }
+
+        .fotomhs {
+            width:100px;
+            height:100px;
+        }
     </style>
 </head>
 <body>
@@ -52,6 +57,7 @@
             <th>NIM</th>
             <th>Nama</th>
             <th>Umur</th>
+            <th>foto</th>
             <th>Detail</th>
             <th>Delete</th>
         </tr>
@@ -62,8 +68,9 @@
             <td><?php echo($data['nim']); ?></td>
             <td><?php echo($data['nama']); ?></td>
             <td><?php echo($data['umur']); ?></td>
+            <td><img class="fotomhs"src="../assets/fotomahasiswa/<?php echo($data['namafilefoto']); ?>" alt="foto mahasiswa"></td>
             <td>
-                <a href="template.php?content=viewdetail.php&nim=<?php echo($data['nim']); ?>&nama=<?php echo($data['nama']); ?>&umur=<?php echo($data['umur']); ?>">Detail</a>
+                <a href="template.php?content=viewdetail.php&nim=<?php echo($data['nim']); ?>&nama=<?php echo($data['nama']); ?>&umur=<?php echo($data['umur']); ?>&namafilefoto=<?php echo($data['namafilefoto']); ?>">Detail</a>
             </td>
             <td>
                 <a href="delete.php?nim=<?php echo($data['nim']) ?>">Delete</a>

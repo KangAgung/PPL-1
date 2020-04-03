@@ -13,7 +13,7 @@
 </head>
 <body>
     <div id="container">
-        <form action="simpandb.php" method="POST">
+        <form action="simpandb.php" method="POST" enctype="multipart/form-data">
             <fieldset style="width: 25%;">
             <label for="nim">NIM &nbsp;:</label>
             <input type="text" id="nim" name="nim" value=""><br><br>
@@ -21,6 +21,8 @@
             <input type="text" id="nama" name="nama" value=""><br><br>
             <label for="umur">Umur :</label>
             <input type="text" id="umur" name="umur" value=""><br><br>
+            <label for="foto">Foto :</label>
+            <input type="file" id="foto" name="namafilefoto" value=""><br><br>
             <p style="text-align: right;"><input type="submit" value="Submit"></p>
             </fieldset>
     </div>

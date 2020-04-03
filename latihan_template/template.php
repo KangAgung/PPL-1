@@ -63,21 +63,27 @@
         height: 50px;
         text-align: left;
     }
+
+    .logo {
+        width: 100px;
+        height:100px;
+    }
 </style>
 </head>
 <body>
     <table align="center">
         <tr id="header">
-            <td>Header</td>
+            <td><img src="../assets/polban.png" alt="logo" class="logo"><br> Header</td>
         </tr>
         <tr id="navbar">
         <td>
             <a href="template.php?content=<?php echo"home.php"; ?>">Home</a> | 
             <a href="template.php?content=<?php echo"berita.php"; ?>">Berita</a> |
             <a href="template.php?content=<?php echo"kontak.php"; ?>">Kontak</a> |
+            <a href="template.php?content=<?php echo"display_dan_viewdetail.php"; ?>">Mahasiswa</a> |
             <a href="template.php?content=<?php echo"cari.php"; ?>">Barang</a> |
+            <a href="template.php?content=forminput.html">Tambah Data Mahasiswa</a> |
             <a href="logout.php">Logout</a>
-            <!-- <a href="template.php?content= echo"forminput.html"; ">Tambah Data</a> | -->
         </td>
         </tr>
         <tr id="content">
