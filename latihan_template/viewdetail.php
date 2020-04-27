@@ -1,8 +1,18 @@
 <?php
     $nim = $_GET['nim'];
-    $nama = $_GET['nama'];
-    $umur = $_GET['umur'];
-    $namafilefoto = $_GET['namafilefoto']
+
+    $host = "localhost";
+    $database = "dbakademis";
+    $user = "root";
+    $password = "";
+    $koneksi=mysqli_connect($host,$user,$password,$database);
+    if(!$koneksi) {
+        die("Error : ".mysql_error());
+    }
+
+    $sql = "SELECT * FROM mahasiswa WHERE nim = $nim ";
+    $res = mysqli_query($koneksi, $sql);
+    $data = mysqli_fetch_array($res);
 ?>
 
 <!DOCTYPE html>
@@ -45,24 +55,28 @@
         }
     </style>
 </head>
+<body>
 <table id="t1" align="center">
         <tr>
             <th>NIM</th>
-            <td><?php echo $nim; ?></td>
+            <td><?php echo $data['nim']; ?></td>
         </tr>
         <tr>
             <th>Nama</th>
-            <td><?php echo $nama; ?></td>
+            <td><?php echo $data['nama']; ?></td>
         </tr>
         <tr>
             <th>Umur</th>
-            <td><?php echo $umur; ?></td>
+            <td><?php echo $data['umur']; ?></td>
         </tr>
         <tr>
             <th>Foto</th>
-            <td><img class="fotomhs" src="../assets/fotomahasiswa/<?php echo $namafilefoto; ?>" alt="foto mahasiswa"></td>
+            <td><img class="fotomhs" src="../assets/fotomahasiswa/<?php echo $data['namafilefoto']; ?>" alt="foto mahasiswa"></td>
         </tr>
 </table>
+<a href="template.php?content=display_dan_viewdetail.php">Back</a> | 
+<a href="template.php?content=update.php&nim=<?php echo($data['nim']); ?>">Update</a> | 
+<a href="delete.php?nim=<?php echo($data['nim']) ?>">Delete</a>
 
 </body>
 </html>

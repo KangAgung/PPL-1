@@ -15,9 +15,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Latihan 04</title>
     <style>
         #t1 {
             width: 50%;
@@ -59,6 +56,7 @@
             <th>Umur</th>
             <th>foto</th>
             <th>Detail</th>
+            <th>Update</th>
             <th>Delete</th>
         </tr>
     <?php
@@ -70,7 +68,10 @@
             <td><?php echo($data['umur']); ?></td>
             <td><img class="fotomhs"src="../assets/fotomahasiswa/<?php echo($data['namafilefoto']); ?>" alt="foto mahasiswa"></td>
             <td>
-                <a href="template.php?content=viewdetail.php&nim=<?php echo($data['nim']); ?>&nama=<?php echo($data['nama']); ?>&umur=<?php echo($data['umur']); ?>&namafilefoto=<?php echo($data['namafilefoto']); ?>">Detail</a>
+                <a href="template.php?content=viewdetail.php&nim=<?php echo($data['nim']); ?>">Detail</a>
+            </td>
+            <td>
+                <a href="template.php?content=update.php&nim=<?php echo($data['nim']); ?>">Update</a>
             </td>
             <td>
                 <a href="delete.php?nim=<?php echo($data['nim']) ?>">Delete</a>
