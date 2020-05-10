@@ -43,7 +43,7 @@
             background-color: #eee;
         }
         .hasil {
-            text-align: center;
+            text-align: inherit;
         }
         </style>
 </head>
@@ -73,7 +73,8 @@
             <th>Kode</th>
             <th>Nama</th>
             <th>harga</th>
-            <th>stock</th>
+            <th>stok</th>
+            <th>Aksi</th>
         </tr>
     
         
@@ -85,6 +86,7 @@
             <td><?php echo($data['nama_barang']); ?></td>
             <td><?php echo($data['harga']); ?></td>
             <td><?php echo($data['stock']); ?></td>
+            <td><a href="template.php?content=cart.php&data=<?php echo($data['kode_barang']); ?>">Tambah ke keranjang</a></td>
         </tr>
     <?php
         }

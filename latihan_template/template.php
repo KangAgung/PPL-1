@@ -82,6 +82,7 @@
             <a href="template.php?content=<?php echo"kontak.php"; ?>">Kontak</a> |
             <a href="template.php?content=<?php echo"display_dan_viewdetail.php"; ?>">Mahasiswa</a> |
             <a href="template.php?content=<?php echo"cari.php"; ?>">Barang</a> |
+            <a href="template.php?content=<?php echo"cart.php"; ?>">Keranjang</a> |
             <a href="template.php?content=forminput.html">Tambah Data Mahasiswa</a> |
             <a href="logout.php">Logout</a>
         </td>
