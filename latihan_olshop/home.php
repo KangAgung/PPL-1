@@ -29,6 +29,7 @@
             <th>Gambar</th>
             <th>harga</th>
             <th>stok</th>
+            <th>berat</th>
             <th>Aksi</th>
         </tr>
     
@@ -42,6 +43,7 @@
             <td><img class="foto-barang" src="../assets/barang/<?php echo($data['gambar_barang']); ?>" alt="barang"></td>
             <td><?php echo($data['harga']); ?></td>
             <td><?php echo($data['stok']); ?></td>
+            <td><?php echo($data['berat']); ?></td>
             <td><a href="index.php?content=cart.php&data=<?php echo($data['id_barang']); ?>&qty=1">Add to Cart</a></td>
         </tr>
     <?php

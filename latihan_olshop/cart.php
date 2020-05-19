@@ -36,6 +36,7 @@
             <th>Nama Barang</th>
             <th>harga</th>
             <th>jumlah</th>
+            <th>Berat</th>
             <th>sub total</th>
         </tr>
         
@@ -45,6 +46,7 @@
             <td><?php echo $value[1]; ?></td>
             <td><?php echo $value[2]; ?></td>
             <td><?php echo $value[3]; ?></td>
+            <td><?php echo $value[4]; ?></td>
             <td><?php echo $value[2]*$value[3]; ?></td>
             </tr>
         <?php
@@ -61,6 +63,15 @@
                         $quantity = $quantity + $value[3];
                     }
                     echo $quantity;
+                 ?>
+            </td>
+            <td>
+                <?php
+                    $beratTot = 0;
+                    foreach ($_SESSION['cart'] as $value) {
+                        $beratTot = $beratTot + $value[3]*$value[4];
+                    }
+                    echo $beratTot;
                  ?>
             </td>
             <td>

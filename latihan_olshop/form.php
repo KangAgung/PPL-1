@@ -61,8 +61,14 @@
         <legend><h3>Detail Pembayaran :</h3></legend>
             <label for="Harga">Harga :</label>
             <input type="text" id="harga" name="harga" value="<?php if(isset($_SESSION['harga'])){ echo $_SESSION['harga']; }?>" disabled><br><br>
+            <label for="Berat Barang">Total Berat Barang :</label>
+            <input type="text" id="berat_barang" name="berat_barang" value="<?php echo $beratTotal;?>" disabled><br><br>
+            <label for="Ongkir per kilo">Ongkir per Kilo :</label>
+            <input type="text" id="ongkir_per_kilo" name="ongkir_per_kilo" value="<?php echo $ongkir_per_kilo;?>" disabled><br><br>
+            <hr>
             <label for="Ongkir">Ongkir :</label>
             <input type="text" id="ongkir" name="ongkir" value="<?php echo $ongkir;?>" disabled><br><br>
+            <hr>
             <label for="Total Harga">Total Harga :</label>
             <input type="text" id="total_harga" name="total_harga" value="<?php if(isset($_SESSION['harga'])){ echo $_SESSION['harga']+$ongkir; }?>" disabled><br><br><br>
         </fieldset>
@@ -123,6 +129,8 @@
                 }
             }
             ?>
+            <label for="Banyak Barang">Total Berat Barang :</label>
+            <input type="text" id="banyak_barang" name="banyak_barang" value="<?php echo $beratTotal;?>" disabled><br><br>
         <hr>
             <label for="Harga">Harga :</label>
             <input type="text" id="harga" name="harga" value="<?php if(isset($_SESSION['harga'])){ echo $_SESSION['harga']; }?>" disabled><br><br>
