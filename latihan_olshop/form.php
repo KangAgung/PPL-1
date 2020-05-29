@@ -1,5 +1,5 @@
 <?php
-    require_once 'koneksi.php';
+    require_once 'config/koneksi.php';
 
     $beratTotal = $ongkir = 0;
     if (isset($_SESSION['cart'])) {
@@ -19,13 +19,14 @@
         $beratTotal = ceil($beratTotal);
     }
     
-    if(isset($_POST['nama'])){
+    if(isset($_POST['nama']) && $_POST['alamat'] && $_POST['kode_pos']){
         $nama = $_POST['nama'];
         $no_hp = $_POST['no_hp'];
         $alamat = $_POST['alamat'];
         $kode_pos = $_POST['kode_pos'];
         $totalHarga = $_SESSION['harga'];
         $tgl_pembelian = date("Y-m-d H:i:s");
+        $status = 0;
 
         $sql = "SELECT ongkir_per_kilo FROM ongkir WHERE kode_tujuan = '$kode_pos'";
         $res = mysqli_query($koneksi, $sql);
@@ -33,9 +34,20 @@
         $ongkir_per_kilo = $result['ongkir_per_kilo'];
 
         $ongkir = $beratTotal * $ongkir_per_kilo;
+        
+        foreach ($_SESSION['cart'] as $value) {  
+          $id_barang = $value[0];
+          $sql = "SELECT stok FROM barang WHERE id_barang = '$id_barang'";
+          $res = mysqli_query($koneksi, $sql);
+          $result = mysqli_fetch_array($res);
+          $stok = $result['stok'] - $value[3];
+          $sql = "UPDATE barang SET stok = '$stok' WHERE id_barang = '$id_barang'";
+          $res = mysqli_query($koneksi, $sql);
+        }
 
-        $sql = "INSERT INTO penjualan VALUES (null,'$nama','$no_hp','$alamat','$kode_pos','$totalHarga','$tgl_pembelian')";
+        $sql = "INSERT INTO penjualan VALUES (null,'$nama','$no_hp','$alamat','$kode_pos','$totalHarga','$tgl_pembelian','$status')";
         $res = mysqli_query($koneksi, $sql);
+        $last_insert_id = mysqli_insert_id($koneksi);
 
         foreach ($_SESSION['cart'] as $value) { 
             $id_barang = $value[0]; 
@@ -44,101 +56,264 @@
             $sql = "INSERT INTO jual VALUES (LAST_INSERT_ID(), '$id_barang', '$kuantitas', '$harga_satuan')";
             $res = mysqli_query($koneksi, $sql);
         }
-
-        foreach ($_SESSION['cart'] as $value) {  
-            $id_barang = $value[0];
-            $sql = "SELECT stok FROM barang WHERE id_barang = '$id_barang'";
-            $res = mysqli_query($koneksi, $sql);
-            $result = mysqli_fetch_array($res);
-            $stok = $result['stok'] - $value[3];
-            $sql = "UPDATE barang SET stok = '$stok' WHERE id_barang = '$id_barang'";
-            $res = mysqli_query($koneksi, $sql);
-        }
         
 ?>
 <div class="container">
-        <fieldset>
-        <legend><h3>Detail Pembayaran :</h3></legend>
-            <label for="Harga">Harga :</label>
-            <input type="text" id="harga" name="harga" value="<?php if(isset($_SESSION['harga'])){ echo $_SESSION['harga']; }?>" disabled><br><br>
-            <label for="Berat Barang">Total Berat Barang :</label>
-            <input type="text" id="berat_barang" name="berat_barang" value="<?php echo $beratTotal;?>" disabled><br><br>
-            <label for="Ongkir per kilo">Ongkir per Kilo :</label>
-            <input type="text" id="ongkir_per_kilo" name="ongkir_per_kilo" value="<?php echo $ongkir_per_kilo;?>" disabled><br><br>
-            <hr>
-            <label for="Ongkir">Ongkir :</label>
-            <input type="text" id="ongkir" name="ongkir" value="<?php echo $ongkir;?>" disabled><br><br>
-            <hr>
-            <label for="Total Harga">Total Harga :</label>
-            <input type="text" id="total_harga" name="total_harga" value="<?php if(isset($_SESSION['harga'])){ echo $_SESSION['harga']+$ongkir; }?>" disabled><br><br><br>
-        </fieldset>
-    Terima kasih telah berbelanja disini.<br>
-    barang akan segera dikirim.<br><br>
-    <a href="index.php?content=home.php">Kembali berbelanja</a>
-</div>
 
+<div class="row">
+
+<div class="col-lg-12">
+
+<div class="row my-4">
+      <div class="col-12">
+        <div class="alert alert-success py-3" role="alert">
+          <div class="text-center">
+          Terima kasih telah berbelanja disini. <a href="index.php?content=home.php">klik disini</a> untuk kembali belanja
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title">Detail Order :</h3>
+            <div class="table-responsive px-3 py-3">
+              <table class="table table-sm table-borderless">
+                <tr>
+                  <td>ID Penjualan</td>
+                  <td>
+                    <?php echo $last_insert_id; ?>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Nama</td>
+                  <td>
+                    <?php echo $nama; ?>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Nomor Telepon</td>
+                  <td>
+                    <?php echo $no_hp; ?>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Alamat</td>
+                  <td>
+                    <?php echo $alamat; ?>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Kode Pos</td>
+                  <td>
+                    <?php echo $kode_pos; ?>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Tanggal Pembelian</td>
+                  <td>
+                    <?php echo $tgl_pembelian; ?>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Status</td>
+                  <td>
+                    <?php
+                      if ($status == 0) {
+                          echo "Belum dibayar";
+                      } else if ($status == 1) {
+                          echo "Sudah dibayar";
+                      } else {
+                          echo "Sudah dikirim";
+                      }
+                    ?>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div class="card">
+              <div class="card-body">
+                  <div class="table-responsive">
+                  <h5 class="card-title">Barang yang dibeli :</h5>
+                    <table class="table table-striped text-center">
+                      <thead class="thead-dark">
+                        <tr>
+                          <th>Kode Barang</th>
+                          <th>Nama Barang</th>
+                          <th>harga satuan</th>
+                          <th>jumlah</th>
+                          <th>Berat (Kg)</th>
+                          <th>sub total</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      <?php
+                        if (isset($_SESSION['cart'])) {    
+                          foreach ($_SESSION['cart'] as $value) {
+                      ?>
+                        <tr>
+                          <td><?php echo $value[0]; ?></td>
+                          <td><?php echo $value[1]; ?></td>
+                          <td><?php echo $value[2]; ?></td>
+                          <td><?php echo $value[3]; ?></td>
+                          <td><?php echo $value[4]; ?></td>
+                          <td><?php echo number_format($value[2]*$value[3],0,',','.'); ?></td>
+                        </tr>
+                      <?php
+                          }
+                        }
+                      ?>
+                        <tr>
+                          <th colspan="5" class="text-right">Total Harga :</th>
+                          <th><?php if(isset($_SESSION['harga'])){ echo number_format($_SESSION['harga'],0,',','.'); }?></th>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="table-responsive">
+              <h3 class="card-title">Rincian total harga</h3>
+                <table class="table table-sm">
+                  <tr>
+                    <td>Harga Total</td>
+                    <td>
+                      <?php if(isset($_SESSION['harga'])){ echo number_format($_SESSION['harga'],0,',','.'); }?>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Berat Total</td>
+                    <td>
+                      <?php echo $beratTotal;?>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Ongkir per Kg</td>
+                    <td>
+                    <?php echo number_format($ongkir_per_kilo,0,',','.');?>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Biaya Ongkir</td>
+                    <td>
+                      <?php echo number_format($ongkir,0,',','.');?>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Total</th>
+                    <th>
+                      <?php if(isset($_SESSION['harga'])){ echo number_format($_SESSION['harga']+$ongkir,0,',','.'); }?>
+                    </th>
+                  </tr>
+                </table>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+<!-- /.row -->
+
+</div>
+<!-- /.col-lg-9 -->
 <?php
         unset($_SESSION['cart']);
         unset($_SESSION['harga']);
 
     } else {
 ?>
-
 <div class="container">
-    <form action="index.php?content=form.php" method="post">
-        <fieldset style="width: 30%;">
-        <legend><h3>Form Pembelian :</h3></legend>
-            <label for="nama">Nama :</label>
-            <input type="text" id="nama" name="nama" value="" required><br><br>
 
-            <label for="hp">No. HP :</label>
-            <input type="text" id="hp" name="no_hp" value="" required><br><br>
+<div class="row">
 
-            <label for="alamat">Alamat :</label>
-            <input type="text" id="alamat" name="alamat" value="" required><br><br>
+<div class="col-lg-12">
 
-            <?php
-                $sql = "SELECT kode_tujuan FROM ongkir";
-                $res = mysqli_query($koneksi, $sql);
-                $result = mysqli_fetch_all($res);
-            ?>
-            
-            <label for="kode pos">Kode Pos :</label>
-            <select id="kode_pos" name="kode_pos">
-            <?php
-                foreach ($result as $value) {
-            ?>
-                    <option value="<?php echo $value[0];?>"><?php echo $value[0]; ?></option>
-            <?php
-                }
-            ?>
-            </select><br><br>
+<div class="row my-4">
+      <div class="col-lg-1"></div>
+      <div class="col-lg-4">
+        <div class="card">
+          <div class="card-body">
+          <h3 class="card-title">Form Data Pembeli</h3>
+            <form action="index.php?content=form.php" method="post">
+              <div class="form-group">
+                <label for="nama">Nama: </label>
+                <input class="form-control" type="text" id="nama" name="nama" placeholder="Nama" required>
+              </div>
+              <div class="form-group">
+                <label for="hp">No. HP :</label>
+                <input class="form-control" type="text" id="hp" name="no_hp" placeholder="Nomor HP" required>
+              </div>
+              <div class="form-group">
+                <label for="alamat">Alamat :</label>
+                <input class="form-control" type="text" id="alamat" name="alamat" placeholder="Alamat" required>
+              </div>
+              <div class="form-group">
+              <?php
+                    $sql = "SELECT kode_tujuan FROM ongkir";
+                    $res = mysqli_query($koneksi, $sql);
+                    $result = mysqli_fetch_all($res);
+                ?>
+                
+                <label for="kodePos">Kode Pos :</label>
+                <select class="form-control" id="kode_pos" name="kode_pos" required>
+                <option value="" disabled selected>Pilih</option>
+                <?php
+                  foreach ($result as $value) {
+                ?>
+                      <option value="<?php echo $value[0];?>"><?php echo $value[0]; ?></option>
+                <?php
+                  }
+                ?>
+                </select>
+              </div>
+              <div class="text-right">
+                <input class="btn btn-success" type="submit" value="Submit">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
 
-            <span style="text-align: right;"><input type="submit" value="Submit"></span>
-            <hr>
-        <legend><h4>Barang Belanjaan :</h4></legend>
-            <?php
+      <div class="col-lg-1"><br></div>
+      <div class="col-lg-6">
+      <div class="table-responsive">
+      <h5>List Barang :</h5>
+      <table class="table table-striped table-bordered text-center">
+        <thead class="thead-dark">
+          <tr>
+            <th>Kode Barang</th>
+            <th>Nama Barang</th>
+            <th>Banyak Barang</th>
+          </tr>
+        </thead>
+  
+        <tbody>
+          <?php
             if (isset($_SESSION['cart'])) {    
                 foreach ($_SESSION['cart'] as $value) {
-            ?>
-                    <label for="Nama Barang">Nama Barang :</label>
-                    <input type="text" id="nama_barang" name="nama_barang" value="<?php echo $value[1];?>" disabled><br><br>
-                    <label for="Banyak Barang">Banyak Barang :</label>
-                    <input type="text" id="banyak_barang" name="banyak_barang" value="<?php echo $value[3];?>" disabled><br><br>
-            <?php
-                }
+          ?>
+            <tr>
+              <td><?php echo $value[0]; ?></td>
+              <td><?php echo $value[1]; ?></td>
+              <td><?php echo $value[3]; ?></td>
+            </tr>
+          <?php
+              }
             }
-            ?>
-            <label for="Banyak Barang">Total Berat Barang :</label>
-            <input type="text" id="banyak_barang" name="banyak_barang" value="<?php echo $beratTotal;?>" disabled><br><br>
-        <hr>
-            <label for="Harga">Harga :</label>
-            <input type="text" id="harga" name="harga" value="<?php if(isset($_SESSION['harga'])){ echo $_SESSION['harga']; }?>" disabled><br><br>
-
-        </fieldset>
-    </form>
+          ?>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
+<!-- /.row -->
 
+</div>
+<!-- /.col-lg-9 -->
 <?php
     }
 ?>

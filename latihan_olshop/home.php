@@ -1,52 +1,66 @@
 <?php 
-    require_once "koneksi.php";
+    require_once "config/koneksi.php";
 ?>
 
-    <form action="index.php?content=home.php" method="post">
-        <label for="Cari">Cari &nbsp;:</label>
-        <input type="text" id="cari" name="cari" value="">
-        <input type="submit" value="Cari"><br><br>
-    </form>
+<div class="col-lg-9">
 
-    <?php
-         if(isset($_POST['cari'])){
+<div class="row my-4">
 
-            $cari = $_POST['cari'];
-    ?>
-        <div class="hasil">Hasil Pencarian : <?php echo($cari); ?></div><br>
-    <?php
-            $sql = "SELECT * FROM barang WHERE nama_barang LIKE'%$cari%'";
-            $res = mysqli_query($koneksi, $sql);
-        }else{
-            $sql = "SELECT * from barang";
-            $res = mysqli_query($koneksi, $sql);
+<?php
+    if(isset($_GET['cari'])){
+        $cari = $_GET['cari'];
+        $sql = "SELECT * FROM barang WHERE nama_barang LIKE'%$cari%'";
+        $res = mysqli_query($koneksi, $sql);
+?>
+  <div class="col-md-12 mb-4">Hasil Pencarian : <?php echo($cari); ?></div>
+<?php
+        if (mysqli_affected_rows($koneksi) == 0) {
+?>
+  <div class="col-md-12 mb-4">Hasil Pencarian <?php echo($cari); ?> Tidak dapat ditemukan</div>
+<?php
         }
-    ?>
-    <table class="list-barang">
-        <tr>
-            <th>Kode</th>
-            <th>Nama Barang</th>
-            <th>Gambar</th>
-            <th>harga</th>
-            <th>stok</th>
-            <th>berat</th>
-            <th>Aksi</th>
-        </tr>
-    
-        
-    <?php
-        while ($data = mysqli_fetch_array($res)) {
-    ?>        
-        <tr>
-            <td><?php echo($data['id_barang']); ?></td>
-            <td><?php echo($data['nama_barang']); ?></td>
-            <td><img class="foto-barang" src="../assets/barang/<?php echo($data['gambar_barang']); ?>" alt="barang"></td>
-            <td><?php echo($data['harga']); ?></td>
-            <td><?php echo($data['stok']); ?></td>
-            <td><?php echo($data['berat']); ?></td>
-            <td><a href="index.php?content=cart.php&data=<?php echo($data['id_barang']); ?>&qty=1">Add to Cart</a></td>
-        </tr>
-    <?php
-        }
-    ?>
-    </table>
+    } else {
+        $sql = "SELECT * from barang";
+        $res = mysqli_query($koneksi, $sql);
+    }
+
+    while ($data = mysqli_fetch_array($res)) {
+?>
+  <div class="col-lg-4 col-md-6 mb-4">
+    <div class="card h-100">
+      <a href="../assets/barang/<?php echo($data['gambar_barang']); ?>" data-fancybox >
+          <img class="card-img-top" src="../assets/barang/<?php echo($data['gambar_barang']); ?>" alt="<?php echo($data['nama_barang']); ?>">
+      </a>
+      <div class="card-body">
+        <h4 class="card-title">
+          <a href="#"><?php echo($data['nama_barang']); ?></a>
+        </h4>
+        <h5>Rp. <?php echo(number_format($data['harga'],0,',','.')); ?></h5>
+        <p class="card-text">
+            Stok tersisa : <?php echo($data['stok']); ?> <br>
+            Berat satuan : <?php echo($data['berat']); ?>
+        </p>
+      </div>
+      <div class="card-footer">
+        <div class="text-muted">
+          <form action="index.php?content=cart.php" method="post" class="form-inline">
+            <div class="form-group">
+              <label for="quantity">Quantity : </label>
+              <input type="hidden" name="id" value="<?php echo($data['id_barang']); ?>">
+              <input type="number" class="form-control mx-sm-1" name="qty" value="1" min="1" max="<?php echo($data['stok']); ?>">
+            </div>
+        </div>
+      </div>
+      <button class="btn btn-info" type="submit"><i class="fa fa-plus"></i> Add to Cart</button>
+      </form>
+    </div>
+  </div>
+<?php
+    }
+?>
+
+</div>
+<!-- /.row -->
+
+</div>
+<!-- /.col-lg-9 -->

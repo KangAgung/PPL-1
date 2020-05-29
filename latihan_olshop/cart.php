@@ -1,102 +1,146 @@
 <?php
-    require_once "koneksi.php";
+    require_once "config/koneksi.php";
 
     if (isset($_GET['empty']) && $_GET['empty'] == true) {
         unset($_SESSION['cart']);
         unset($_SESSION['harga']);
     }
+
+    if (isset($_GET['aksi']) && $_GET['aksi'] == "del") {
+        unset($_SESSION['cart'][$_GET['id']]);
+    }
+
+    if (isset($_GET['aksi']) && $_GET['aksi'] == "plus") {
+      if ($_SESSION['cart'][$_GET['id']][3] < $_SESSION['cart'][$_GET['id']][5]) {
+        $_SESSION['cart'][$_GET['id']][3] += 1;
+      }
+    }
+
+    if (isset($_GET['aksi']) && $_GET['aksi'] == "min") {
+      if ($_SESSION['cart'][$_GET['id']][3] > 1) {
+        $_SESSION['cart'][$_GET['id']][3] -= 1;
+      }
+    }
 ?>
+<div class="container">
 
-    <div class="barang">
-        <a href="index.php?content=home.php">Tambah barang ke keranjang</a>
-    </div><br>
+<div class="row">
+  
+<div class="col-lg-12">
 
-    <table class="list-barang">
-        <?php
-            if (isset($_GET['data'])) {
-                $data = $_GET['data'];
-                $qty = $_GET['qty'];                
+<div class="row my-4">
+
+<?php
+    if (isset($_POST['id'])) {
+        $data = $_POST['id'];
+        $qty = $_POST['qty'];
+
+        $sql = "SELECT * FROM barang WHERE id_barang = $data ";
+        $res = mysqli_query($koneksi, $sql);
     
-                $sql = "SELECT * FROM barang WHERE id_barang = $data ";
-                $res = mysqli_query($koneksi, $sql);
-    
-                $result = mysqli_fetch_array($res);
-                if (empty($_SESSION['cart'][$result['id_barang']])) {
-                    $_SESSION['cart'][$result['id_barang']] = array($result['id_barang'],$result['nama_barang'],$result['harga'],$qty,$result['berat']);
-                } else {
-                    $_SESSION['cart'][$result['id_barang']][3] += $qty;
-                }
+        $result = mysqli_fetch_array($res);
+        if (empty($_SESSION['cart'][$result['id_barang']])) {
+            $_SESSION['cart'][$result['id_barang']] = array($result['id_barang'],$result['nama_barang'],$result['harga'],$qty,$result['berat'],$result['stok']);
+        } else {
+            $_SESSION['cart'][$result['id_barang']][3] += $qty;
+        }
                 
-            }
+    }
 
-            if (!empty($_SESSION['cart'])) {
-        ?>
-        <tr>
+    if (!empty($_SESSION['cart'])) {
+?>
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered text-center">
+        <thead class="thead-dark">
+          <tr>
             <th>Kode Barang</th>
             <th>Nama Barang</th>
-            <th>harga</th>
+            <th>harga/unit</th>
             <th>jumlah</th>
-            <th>Berat</th>
+            <th>Berat (Kg)</th>
             <th>sub total</th>
-        </tr>
-        
-        <?php foreach ($_SESSION['cart'] as $value) {  ?>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+  
+        <tbody>
+          <?php foreach ($_SESSION['cart'] as $value) {  ?>
             <tr>
-            <td><?php echo $value[0]; ?></td>
-            <td><?php echo $value[1]; ?></td>
-            <td><?php echo $value[2]; ?></td>
-            <td><?php echo $value[3]; ?></td>
-            <td><?php echo $value[4]; ?></td>
-            <td><?php echo $value[2]*$value[3]; ?></td>
+              <td><?php echo $value[0]; ?></td>
+              <td><?php echo $value[1]; ?></td>
+              <td>Rp. <?php echo number_format($value[2],0,',','.'); ?></td>
+              <td><?php echo $value[3]; ?></td>
+              <td><?php echo $value[4]; ?></td>
+              <td>Rp. <?php echo number_format($value[2]*$value[3],0,',','.'); ?></td>
+              <td>
+                <a href="index.php?content=cart.php&aksi=plus&id=<?php echo $value[0]; ?>" class="btn btn-info">
+                    <i class="fa fa-plus"></i>
+                </a>
+                <a href="index.php?content=cart.php&aksi=min&id=<?php echo $value[0]; ?>" class="btn btn-info">
+                    <i class="fa fa-minus"></i>
+                </a>
+                  <a href="index.php?content=cart.php&aksi=del&id=<?php echo $value[0]; ?>" class="btn btn-danger">
+                    <i class="fa fa-trash-alt"></i>
+                  </a>
+              </td>
             </tr>
-        <?php
-            }
-        ?>
-        
-
-        <tr>
-            <th colspan="3">Total :</th>
-            <td>
-                <?php
-                    $quantity = 0;
-                    foreach ($_SESSION['cart'] as $value) {
-                        $quantity = $quantity + $value[3];
-                    }
-                    echo $quantity;
-                 ?>
-            </td>
-            <td>
-                <?php
-                    $beratTot = 0;
-                    foreach ($_SESSION['cart'] as $value) {
-                        $beratTot = $beratTot + $value[3]*$value[4];
-                    }
-                    echo $beratTot;
-                 ?>
-            </td>
-            <td>
-            <?php 
-                $totalHarga = 0;
-                foreach ($_SESSION['cart'] as $value) {
-                    $totalHarga = $totalHarga + $value[2]*$value[3];
-                }
-                $_SESSION['harga'] = $totalHarga;
-                echo $totalHarga;
-            ?>
-            </td>
-        </tr>
-    </table>
-        <div class="barang">
-            <a href="index.php?content=cart.php&empty=true">kosongkan keranjang</a>
-        </div>
-            <div class="alt-barang">
-                <a href="index.php?content=form.php">Beli</a>
-            </div>
-        <?php
-            } else { 
-        ?>
+          <?php
+              }
+          ?>
+            <tr>
+              <th class="table-dark" colspan="3">Total :</th>
+              <td>
+                  <?php
+                      $quantity = 0;
+                      $beratTot = 0;
+                      $totalHarga = 0;
+                      foreach ($_SESSION['cart'] as $value) {
+                          $quantity = $quantity + $value[3];
+                          $beratTot = $beratTot + $value[3]*$value[4];
+                          $totalHarga = $totalHarga + $value[2]*$value[3];
+                      }
+                      echo $quantity;
+                   ?>
+              </td>
+              <td>
+                  <?php
+                      echo $beratTot;
+                   ?>
+              </td>
+              <td><b>Rp. 
+              <?php
+                  $_SESSION['harga'] = $totalHarga;
+                  echo number_format($totalHarga,0,',','.');
+              ?></b>
+              </td>
+              <td>
+                  <a href="index.php?content=cart.php&empty=true" class="btn btn-danger">
+                    Hapus
+                  </a>
+                  <a href="index.php?content=form.php" class="btn btn-success">
+                    Beli
+                  </a>
+              </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+<?php
+    } else { 
+?>
+      <div class="col-12">
+        <div class="alert alert-info py-3" role="alert">
+          <div class="text-center">
             Keranjang Kosong
-    </table>
-        <?php
-            }
-        ?>
+          </div>
+        </div>
+      </div>
+<?php
+    }
+?>
+
+</div>
+<!-- /.row -->
+
+</div>
+<!-- /.col-lg-12 -->

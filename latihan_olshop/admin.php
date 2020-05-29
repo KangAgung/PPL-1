@@ -1,5 +1,5 @@
 <?php 
-    require_once "koneksi.php";
+    require_once "config/koneksi.php";
 
     if(isset($_GET['status'])){
         $id = $_GET['data'];
@@ -14,60 +14,92 @@
         $sql = "SELECT * FROM penjualan";
         $res = mysqli_query($koneksi, $sql);
     }
-?>
 
-    <table class="list-barang">
-        <tr>
-            <th>ID Penjualan</th>
-            <th>Nama</th>
-            <th>Telepon</th>
-            <th>Alamat</th>
-            <th>Kode Pos</th>
-            <th>Pembayaran</th>
-            <th>Tgl. Pembelian</th>
-            <th>Status</th>
-            <th>Aksi</th>
-        </tr>
-    
+?>
+<div class="container">
+
+<div class="row">
+
+<div class="col-lg-12">
+
+<div class="row my-4">
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-sm text-center">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID Penjualan</th>
+                    <th>Nama</th>
+                    <th>Telepon</th>
+                    <th>Alamat</th>
+                    <th>Kode Pos</th>
+                    <th>Total Harga</th>
+                    <th>Tgl. Pembelian</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
         
-    <?php
-        while ($data = mysqli_fetch_array($res)) {
-    ?>        
-        <tr>
-            <td><?php echo($data['id_penjualan']); ?></td>
-            <td><?php echo($data['nama']); ?></td>
-            <td><?php echo($data['nomor_hp']); ?></td>
-            <td><?php echo($data['alamat']); ?></td>
-            <td><?php echo($data['kode_pos']); ?></td>
-            <td><?php echo($data['harga_total']); ?></td>
-            <td><?php echo($data['tgl_penjualan']); ?></td>
-            <td>
+            
+        <?php
+          while ($data = mysqli_fetch_array($res)) {
+
+            if ($data['status'] == 0) {
+        ?>
+              <tr class="table-danger">
+        <?php
+            } elseif ($data['status'] == 1) {
+        ?>
+              <tr class="table-warning">
+        <?php
+            } else {
+        ?>
+              <tr class="table-success">
+        <?php
+            }
+        ?>
+                <td><?php echo($data['id_penjualan']); ?></td>
+                <td><?php echo($data['nama']); ?></td>
+                <td><?php echo($data['nomor_hp']); ?></td>
+                <td><?php echo($data['alamat']); ?></td>
+                <td><?php echo($data['kode_pos']); ?></td>
+                <td>Rp. <?php echo(number_format($data['harga_total'],0,',','.')); ?></td>
+                <td><?php echo($data['tgl_penjualan']); ?></td>
+                <td>
+                    <?php
+                        if ($data['status'] == 0) {
+                            echo "Belum dibayar";
+                        } else if ($data['status'] == 1) {
+                            echo "Sudah dibayar";
+                        } else {
+                            echo "Sudah dikirim";
+                        }
+                         
+                    ?>
+                </td>
+                <td>
                 <?php
-                    if ($data['status'] == 0) {
-                        echo "Belum dibayar";
-                    } else if ($data['status'] == 1) {
-                        echo "Sudah dibayar";
-                    } else {
-                        echo "Sudah dikirim";
-                    }
-                     
+                  if ($data['status'] != 2) {
                 ?>
-            </td>
-            <td>
-            <?php
-                if ($data['status'] == 2) {
-            ?>
-                    Tidak ada Aksi
-            <?php
-                } else {
-            ?>
-                <a href="index.php?content=admin.php&data=<?php echo($data['id_penjualan']); ?>&status=<?php echo($data['status']); ?>">Update</a>
-            <?php
-                }  
-            ?>
-            </td>
-        </tr>
-    <?php
-        }
-    ?>
-    </table>
+                      <a class="btn btn-info btn-sm" href="index.php?content=admin.php&data=<?php echo($data['id_penjualan']); ?>&status=<?php echo($data['status']); ?>">
+                          Update
+                      </a>
+                <?php
+                  } 
+                ?>
+                  <a class="btn btn-primary btn-sm" href="index.php?content=view_detail.php&data=<?php echo($data['id_penjualan']); ?>">
+                        Detail
+                  </a>
+                </td>
+            </tr>
+        <?php
+            }
+        ?>
+        </table>
+    </div>
+
+</div>
+<!-- /.row -->
+
+</div>
+<!-- /.col-lg-12 -->
