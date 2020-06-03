@@ -11,7 +11,7 @@
 
     $id = $_GET['data'];
 
-    $sql = "SELECT * FROM penjualan WHERE id_penjualan = $id";
+    $sql = "SELECT * FROM penjualan JOIN customer ON penjualan.id_customer = customer.id_customer WHERE id_penjualan = $id";
     $res = mysqli_query($koneksi, $sql);
     $data = mysqli_fetch_array($res);
 ?>
@@ -61,7 +61,7 @@
           <td><?php echo($data['alamat']); ?></td>
           <td><?php echo($data['kode_pos']); ?></td>
           <td>Rp. <?php echo(number_format($data['harga_total'],0,',','.')); ?></td>
-          <td><?php echo($data['tgl_penjualan']); ?></td>
+          <td><?php echo($data['waktu_penjualan']); ?></td>
           <td>
           <?php
             if ($data['status'] == 0) {
@@ -100,7 +100,7 @@
           <td><?php echo $data['id_barang']; ?></td>
           <td><?php echo $data['nama_barang']; ?></td>
           <td><?php echo $data['kuantitas']; ?></td>
-          <td><?php echo $data['harga_beli']; ?></td>
+          <td>Rp. <?php echo number_format($data['harga_beli'],0,',','.') ?></td>
         </tr>
       <?php
         }

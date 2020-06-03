@@ -8,10 +8,10 @@
         $sql = "UPDATE penjualan SET status = '$status' WHERE id_penjualan = '$id'";
         $res = mysqli_query($koneksi, $sql);
 
-        $sql = "SELECT * FROM penjualan";
+        $sql = "SELECT * FROM penjualan JOIN customer ON penjualan.id_customer = customer.id_customer";
         $res = mysqli_query($koneksi, $sql);
     } else {
-        $sql = "SELECT * FROM penjualan";
+        $sql = "SELECT * FROM penjualan JOIN customer ON penjualan.id_customer = customer.id_customer";
         $res = mysqli_query($koneksi, $sql);
     }
 
@@ -64,7 +64,7 @@
                 <td><?php echo($data['alamat']); ?></td>
                 <td><?php echo($data['kode_pos']); ?></td>
                 <td>Rp. <?php echo(number_format($data['harga_total'],0,',','.')); ?></td>
-                <td><?php echo($data['tgl_penjualan']); ?></td>
+                <td><?php echo($data['waktu_penjualan']); ?></td>
                 <td>
                     <?php
                         if ($data['status'] == 0) {
