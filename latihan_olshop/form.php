@@ -19,11 +19,19 @@
         $beratTotal = ceil($beratTotal);
     }
     
-    if(isset($_POST['nama']) && $_POST['alamat'] && $_POST['kode_pos']){
-        $nama = $_POST['nama'];
-        $no_hp = $_POST['no_hp'];
-        $alamat = $_POST['alamat'];
-        $kode_pos = $_POST['kode_pos'];
+    if(isset($_SESSION['username']) && isset($_SESSION['uid'])){
+        $id_customer = $_SESSION['uid'];
+        $username = $_SESSION['username'];
+
+        $sql = "SELECT * FROM customer WHERE id_customer = '$id_customer'";
+        $res = mysqli_query($koneksi, $sql);
+        $result = mysqli_fetch_array($res);
+
+        $nama = $result['nama'];
+        $no_hp = $result['nomor_hp'];
+        $alamat = $result['alamat'];
+        $kode_pos = $result['kode_pos'];
+
         $totalHarga = $_SESSION['harga'];
         $tgl_pembelian = date("Y-m-d H:i:s");
         $status = 0;
@@ -45,7 +53,7 @@
           $res = mysqli_query($koneksi, $sql);
         }
 
-        $sql = "INSERT INTO penjualan VALUES (null,'$nama','$no_hp','$alamat','$kode_pos','$totalHarga','$tgl_pembelian','$status')";
+        $sql = "INSERT INTO penjualan VALUES (null,'$id_customer','$totalHarga','$tgl_pembelian','$status')";
         $res = mysqli_query($koneksi, $sql);
         $last_insert_id = mysqli_insert_id($koneksi);
 
@@ -224,96 +232,5 @@
         unset($_SESSION['cart']);
         unset($_SESSION['harga']);
 
-    } else {
-?>
-<div class="container">
-
-<div class="row">
-
-<div class="col-lg-12">
-
-<div class="row my-4">
-      <div class="col-lg-1"></div>
-      <div class="col-lg-4">
-        <div class="card">
-          <div class="card-body">
-          <h3 class="card-title">Form Data Pembeli</h3>
-            <form action="index.php?content=form.php" method="post">
-              <div class="form-group">
-                <label for="nama">Nama: </label>
-                <input class="form-control" type="text" id="nama" name="nama" placeholder="Nama" required>
-              </div>
-              <div class="form-group">
-                <label for="hp">No. HP :</label>
-                <input class="form-control" type="text" id="hp" name="no_hp" placeholder="Nomor HP" required>
-              </div>
-              <div class="form-group">
-                <label for="alamat">Alamat :</label>
-                <input class="form-control" type="text" id="alamat" name="alamat" placeholder="Alamat" required>
-              </div>
-              <div class="form-group">
-              <?php
-                    $sql = "SELECT kode_tujuan FROM ongkir";
-                    $res = mysqli_query($koneksi, $sql);
-                    $result = mysqli_fetch_all($res);
-                ?>
-                
-                <label for="kodePos">Kode Pos :</label>
-                <select class="form-control" id="kode_pos" name="kode_pos" required>
-                <option value="" disabled selected>Pilih</option>
-                <?php
-                  foreach ($result as $value) {
-                ?>
-                      <option value="<?php echo $value[0];?>"><?php echo $value[0]; ?></option>
-                <?php
-                  }
-                ?>
-                </select>
-              </div>
-              <div class="text-right">
-                <input class="btn btn-success" type="submit" value="Submit">
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-1"><br></div>
-      <div class="col-lg-6">
-      <div class="table-responsive">
-      <h5>List Barang :</h5>
-      <table class="table table-striped table-bordered text-center">
-        <thead class="thead-dark">
-          <tr>
-            <th>Kode Barang</th>
-            <th>Nama Barang</th>
-            <th>Banyak Barang</th>
-          </tr>
-        </thead>
-  
-        <tbody>
-          <?php
-            if (isset($_SESSION['cart'])) {    
-                foreach ($_SESSION['cart'] as $value) {
-          ?>
-            <tr>
-              <td><?php echo $value[0]; ?></td>
-              <td><?php echo $value[1]; ?></td>
-              <td><?php echo $value[3]; ?></td>
-            </tr>
-          <?php
-              }
-            }
-          ?>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-<!-- /.row -->
-
-</div>
-<!-- /.col-lg-9 -->
-<?php
     }
 ?>

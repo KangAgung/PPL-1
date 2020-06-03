@@ -38,7 +38,7 @@
         <h5>Rp. <?php echo(number_format($data['harga'],0,',','.')); ?></h5>
         <p class="card-text">
             Stok tersisa : <?php echo($data['stok']); ?> <br>
-            Berat satuan : <?php echo($data['berat']); ?>
+            Berat satuan : <?php echo($data['berat']); ?> Kg
         </p>
       </div>
       <div class="card-footer">
@@ -51,7 +51,17 @@
             </div>
         </div>
       </div>
+      <?php
+        if (isset($_SESSION['username'])) {
+      ?>
       <button class="btn btn-info" type="submit"><i class="fa fa-plus"></i> Add to Cart</button>
+      <?php
+        } else {
+      ?>
+      <button class="btn btn-info" type="button" data-toggle="modal" data-target="#loginModal"><i class="fa fa-plus"></i> Add to Cart</button>
+      <?php
+        }
+      ?>
       </form>
     </div>
   </div>
