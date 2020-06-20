@@ -22,7 +22,7 @@
 
 <div class="col-lg-12">
 
-<div class="row my-4">
+<div class="row my-4 mx-2">
 
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-sm text-center">
@@ -97,6 +97,10 @@
         ?>
         </table>
     </div>
+    <a class="btn btn-success ml-auto mr-3" href="export.php">
+        <i class="fa fa-save"></i>
+        Export to Excel
+    </a>
 
 </div>
 <!-- /.row -->
