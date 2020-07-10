@@ -102,7 +102,7 @@
             <i class="fa fa-upload"></i>
             Import from Excel
         </a>
-        <a class="btn btn-success mr-3" href="index.php?content=export.php">
+        <a class="btn btn-success mr-3" href="index.php?content=exportExcel.php">
             <i class="fa fa-download"></i>
             Export to Excel
         </a>
