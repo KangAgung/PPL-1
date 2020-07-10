@@ -89,7 +89,7 @@
           <th>ID Barang</th>
           <th>Nama Barang</th>
           <th>Kuantitas</th>
-          <th>Harga Beli</th>
+          <th>Harga Jual</th>
         </tr>
       </thead>
       <tbody>
